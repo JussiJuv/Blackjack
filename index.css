@@ -1,0 +1,56 @@
+body {
+    background-image: url("img/TableTexture.jpg");
+    text-align: center;
+}
+
+h1 {
+    font-size: 60px;
+    font-family: Helvetica, sans-serif;
+    color: antiquewhite;
+}
+
+h2 {
+    font-size: 40px;
+    color:antiquewhite;
+}
+
+h3 {
+    font-size: 30px;
+    color:antiquewhite;
+}
+
+#dealerCards img {
+    height: 200px;
+    width: auto;
+    margin: 1px;
+}
+
+#playerCards img {
+    height: 200px;
+    width: auto;
+    margin: 10px;
+}
+
+#results {
+    color: red;
+} 
+
+button {
+    border-radius: 10px;
+    background-color: rgb(16, 156, 35);
+    color: antiquewhite;
+    /*padding: 15px 32px;*/
+    width: 90px;
+    height: 60px;
+    font-size: 32px;
+}
+
+button:hover {
+    background-color: rgb(12, 116, 26);
+    transition-duration: 0.5s;
+}
+
+button:active {
+    background-color: rgb(12, 116, 26);
+    transform: translateY(4px);
+}
