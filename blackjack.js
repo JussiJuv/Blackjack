@@ -11,9 +11,39 @@ var hidden;
 var deck = [];
 var shuffledDeck = [];
 
-var canHit = true;
+var canHit = false;
+var canStay = false;
+
+var gamesPlayed = 0;
+var canPlayAgain = false;
+
+var canBet = true;
+var balance = 10000;
+var currentBet = 0;
+var lastBet;
+// chips 5, 25, 50, 100
 
 window.onload = function() {
+    document.getElementById("balance").innerText = "Balance: " + balance;
+    document.getElementById("currentBet").innerText = "Current Bet: 0"
+    document.getElementById("hit").addEventListener("click", hit);
+    document.getElementById("stay").addEventListener("click", stay);
+    document.getElementById("playAgain").addEventListener("click", playAgain);
+    document.getElementById("placeBet").addEventListener("click", placeBet);
+    document.getElementById("5bet").addEventListener("click", () => {chooseBet(5)});
+    document.getElementById("25bet").addEventListener("click", () => {chooseBet(25)});
+    document.getElementById("50bet").addEventListener("click",  () => {chooseBet(50)});
+    document.getElementById("100bet").addEventListener("click", () => {chooseBet(100)});
+    //HandleGame();
+}
+
+function HandleGame() {
+    canPlayAgain = false;
+    canHit = true;
+    document.getElementById("playAgain").disabled = true;
+    document.getElementById("hit").disabled = false;
+    document.getElementById("stay").disabled = false;
+
     buildDeck();
     shuffleDeck();
     startGame();
@@ -29,7 +59,6 @@ function buildDeck() {
             deck.push(values[j] + suits[i]);
         }
     }
-    console.log(deck);
 }
 
 function shuffleDeck() {
@@ -39,10 +68,31 @@ function shuffleDeck() {
         shuffledDeck.push(deck[index]);
         deck.splice(index, 1);
     }
-    console.log(shuffledDeck);
 }
 
-// Jacks, Queens, Kings and Ten is 10 points
+function chooseBet(betValue) {
+    if (canBet) {
+        currentBet = 0;
+        currentBet = betValue;
+        document.getElementById("currentBet").innerText = "Current Bet: " + betValue;
+    }
+}
+
+function placeBet() {
+    console.log("Placed bet: " + currentBet);
+    if (currentBet != 0) {
+        document.getElementById("placeBet").disabled = true;
+        balance = balance - currentBet;
+        document.getElementById("balance").innerText = "Balance: " + balance;
+
+        canHit = true;
+        canStay = true;
+        HandleGame();
+        canBet = false;
+    }
+}
+
+// Jacks, Queens, Kings and Ten are 10 points
 // Ace is 1 or 11
 // Rest are values on the card
 function checkScore(deck, aceCount) {
@@ -60,6 +110,7 @@ function checkScore(deck, aceCount) {
             } 
             else {
                 score = score + 1;
+                aceCount--;
             }
         }
         else {
@@ -89,13 +140,18 @@ function checkForAce(deck) {
 
 function startGame() {
     // Start the game with dealers hidden card
-    // and deal 2 cards to player and dealer
     hidden = shuffledDeck.pop();
     dealerDeck.push(hidden);
+    let hiddenImg = document.createElement("img");
+    hiddenImg.src = "/img/SVG-cards/2B.svg";
+    hiddenImg.setAttribute("id", "hidden");
+    document.getElementById("dealerCards").append(hiddenImg);
+
     let hiddenAce = checkForAce(dealerDeck);
     let hiddenTemp = checkScore(dealerDeck, hiddenAce);
     let hiddenScore = hiddenTemp[0];
     
+    // Dealer second card
     let dealerCard = shuffledDeck.pop();
     dealerDeck.push(dealerCard);
     let cardImg = document.createElement("img");
@@ -108,9 +164,9 @@ function startGame() {
     dealerScore = dtemp[0];
     dealerAceCount = dtemp[1];
     let dealerScoreText = "Dealer Score: " + (dealerScore - hiddenScore);
-    console.log(dealerScoreText);
     document.getElementById("dealerScore").innerText = dealerScoreText;
 
+    // Two player cards
     for (let i = 0; i < 2; i++) {
         let playerCard = shuffledDeck.pop();
         playerDeck.push(playerCard);
@@ -122,17 +178,13 @@ function startGame() {
     let temp = checkScore(playerDeck, playerAceCount);
     playerScore = temp[0];
     playerAceCount = temp[1];
-    console.log(playerScore);
     
     document.getElementById("playerScore").innerText = "Player Score: " + playerScore;
 
-    document.getElementById("hit").addEventListener("click", hit);
-    document.getElementById("stay").addEventListener("click", stay);
 }
 
 
 function hit() {
-    console.log("Pressed Hit");
     if (!canHit) {
         return;
     }
@@ -147,7 +199,6 @@ function hit() {
     playerScore = temp[0];
     playerAceCount = temp[1];
     document.getElementById("playerCards").append(cardImg);
-    console.log(playerScore);
     document.getElementById("playerScore").innerText = "Player Score: " + playerScore;
 
     if (playerScore > 21) {
@@ -158,6 +209,9 @@ function hit() {
 
 
 function stay() {
+    if (!canStay) {
+        return;
+    }
     canHit = false;
     //document.getElementById("hidden").src = "./img/SVG-cards/" + hidden + ".svg";
 
@@ -173,9 +227,6 @@ function stay() {
         dealerScore = temp[0];
         dealerAceCount = temp[1];
         document.getElementById("dealerCards").append(cardImg);
-
-        console.log(dealerScore);
-        console.log(dealerDeck.length);
     }
 
     results();
@@ -190,18 +241,55 @@ function results() {
     }
     else if (dealerScore > 21) {
         resultText = "You Win";
+        balance = balance + 2*currentBet;
+        document.getElementById("balance").innerText = "Balance: " + balance;
     }
     else if (playerScore == dealerScore) {
         resultText = "Tie";
+        balance = balance + currentBet;
+        document.getElementById("balance").innerText = "Balance: " + balance;
     }
     else if (playerScore < dealerScore) {
         resultText = "You Lose";
     }
     else if (playerScore > dealerScore) {
         resultText = "You Win";
+        balance = balance + 2*currentBet;
+        document.getElementById("balance").innerText = "Balance: " + balance;
     }
 
     console.log(resultText);
     document.getElementById("results").innerText = resultText;
     document.getElementById("dealerScore").innerText = "Dealer Score: " + dealerScore;
+    gameOver();
+}
+
+function gameOver() {
+    canPlayAgain = true;
+    document.getElementById("playAgain").disabled = false;
+    document.getElementById("hit").disabled = true;
+    document.getElementById("stay").disabled = true;
+}
+
+function playAgain() {
+    console.log("Play again");
+
+    // Clear all card arrays for a new game
+    dealerDeck = [];
+    playerDeck = [];
+    deck = [];
+    shuffledDeck = [];
+
+    // Clear cards on screen
+    const playerCardElements = document.getElementById("playerCards");
+    const dealerCardElements = document.getElementById("dealerCards");
+    const resultText = document.getElementById("results");
+
+    playerCardElements.innerHTML = "";
+    dealerCardElements.innerHTML = "";
+    resultText.innerHTML = "";
+
+    document.getElementById("placeBet").disabled = false;
+    canBet = true;
+    //HandleGame();
 }

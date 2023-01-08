@@ -9,21 +9,42 @@
    </head>
     <body>
         <!--<h1>Blackjack</h1>-->
-        <h2>Dealer</h2>
-        <h3 id="dealerScore">Dealer Score</h3>
-        <div id="dealerCards">
-            <img id="hidden" src="/img/SVG-cards/2B.svg" alt="">
+        <h2 id="results"></h2>
+        <div>
+            <!--<h2 id="balance"></h2>-->
         </div>
 
+        <h2 id="dealerText">Dealer</h2>
+        <h3 id="dealerScore">Dealer Score</h3>
+        <div id="dealerCards"></div>
         
         <div id="playerCards"></div>
         <h3 id="playerScore">Player Score</h3>
         <h2>Player</h2>
         
-        <button id="hit">Hit</button>
-        <button id="stay">Stay</button>
+        <div>
+            <button id="hit">Hit</button>
+            <button id="stay">Stay</button>
+        </div>
         
-        <h2 id="results"></h2>
+        <h2 id="balance"></h2>
+        <h2 id="currentBet"></h2>
+        <div id="gameButtons">
+            <button class="controllButtons" id="playAgain">Play Again</button>
+            <button class="controllButtons" id="placeBet">Place Bet</button>
+        </div>
+        <!--<div>
+            <button class="controllButtons" id="playAgain">Play Again</button>
+            <button class="controllButtons" id="placeBet">Place Bet</button>
+        </div>-->
+
+        <div id="bets">
+            <button class="betButton" id="5bet">5</button>
+            <button class="betButton" id="25bet">25</button>
+            <button class="betButton" id="50bet">50</button>
+            <button class="betButton" id="100bet">100</button>
+        </div>
+
         
         <script src="blackjack.js"></script> 
     </body>

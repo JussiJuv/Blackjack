@@ -5,7 +5,6 @@ body {
 
 h1 {
     font-size: 60px;
-    font-family: Helvetica, sans-serif;
     color: antiquewhite;
 }
 
@@ -25,15 +24,21 @@ h3 {
     margin: 1px;
 }
 
+#results {
+    position: absolute;
+    color: red;
+    margin-left: 25px;
+    float: left;
+}
+
+
 #playerCards img {
     height: 200px;
     width: auto;
-    margin: 10px;
+    margin: 1px;
 }
 
-#results {
-    color: red;
-} 
+
 
 button {
     border-radius: 10px;
@@ -45,6 +50,7 @@ button {
     font-size: 32px;
 }
 
+
 button:hover {
     background-color: rgb(12, 116, 26);
     transition-duration: 0.5s;
@@ -54,3 +60,67 @@ button:active {
     background-color: rgb(12, 116, 26);
     transform: translateY(4px);
 }
+
+button:disabled {
+    background-color: rgb(69, 231, 91);
+}
+
+#bets {
+    position: absolute;
+    float: left;
+    bottom: 20px;
+} 
+
+.betButton {
+    border-radius: 100%;
+    width: 100px;
+    height: 100px;
+    background-color: rgb(192, 17, 17);
+}
+
+.betButton:hover {
+    background-color: rgb(156, 22, 22);
+    transition-duration: 0.5s;
+}
+
+.betButton:active {
+    background-color: rgb(156, 22, 22);;
+    transform: translateY(-20px);
+}
+
+#balance {
+    position: absolute;
+    color: rgb(219, 219, 18);
+    /*margin-left: 650px;*/
+    bottom: 160px;
+    float:right;
+}
+
+#currentBet {
+    position: absolute;
+    color: rgb(219, 219, 18);
+    /*margin-left: 650px;*/
+    bottom: 100px;
+    float:right;
+}
+
+#gameButtons {
+    position:absolute;
+    float: right;
+    bottom: 20px;
+    right: 0%;
+}
+
+.controllButtons {
+    position: relative;
+    width: 120px;
+    height: 100px;
+    float: right;
+    margin-right: 5px;
+}
+
+/*#playAgain {
+    width: 120px;
+    height: 100px;
+    float: right;
+} */
